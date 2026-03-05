@@ -1,12 +1,12 @@
 ﻿using item.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.HttpResults;    
 using System.Xml.Linq;
 
 namespace stock.Models;
 
 public class Stock
 {
-    public Guid id { get; set; }
+    public Guid Id { get; set; }
 
     public Guid itemID { get; set; } 
 
