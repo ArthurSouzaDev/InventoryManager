@@ -28,9 +28,9 @@ public class inventoryService
         };
         var stock = new Stock
         {
-            id = Guid.NewGuid(),
-            itemID = Guid.NewGuid(),
-            quantity = 0,
+            Id = Guid.NewGuid(),
+            ItemID = item.Id,
+            Quantity = 0,
             updateAt = DateTime.Now,
 
         };
@@ -43,23 +43,23 @@ public class inventoryService
 
     public void addStock(Guid itemId, int quantity)
     {
-        var stock = _stocks.FirstOrDefault(s => s.itemID == itemId);
+        var stock = _stocks.FirstOrDefault(s => s.ItemID == itemId);
         if (stock == null)
             throw new Exception("Estoque não encontrado para esse item!");
 
-        stock.quantity += 1;
+        stock.Quantity += quantity;
         stock.updateAt = DateTime.Now;
         Console.WriteLine("Item adicionado com sucesso!");
 
 
     }
     public void removeStock(Guid itemId) {
-        var stock = _stocks.FirstOrDefault(s => s.itemID == itemId);
+        var stock = _stocks.FirstOrDefault(s => s.ItemID == itemId);
         if (stock == null)
             throw new Exception("Item não existe");
-        if (stock.quantity <= 0)
+        if (stock.Quantity <= 0)
             throw new Exception("item está zerado");
-        stock.quantity -= 1;
+        stock.Quantity -= 1;
         stock.updateAt = DateTime.Now;
         Console.WriteLine("Item removido com sucesso!");
 
