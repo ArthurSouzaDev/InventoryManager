@@ -1,0 +1,15 @@
+# Pastas de build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+
+# Arquivos de build incrementais
+*.ref
+*.refint
+*AssemblyInfo.cs
+
+# Logs
+*.log
