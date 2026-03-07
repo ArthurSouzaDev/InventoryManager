@@ -1,75 +1,73 @@
-﻿using item.Models;
-using stock.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Diagnostics.Eventing.Reader;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml.Linq;
+﻿using InventoryManagerAPI.Models;
+
 
 namespace InventoryManagerAPI.Services;
 
-public class inventoryService
+public class InventoryService
 {
-    public inventoryService() { }
+    public InventoryService() { }
 
-
-    private List<Item> _items = new();
-    private List<Stock> _stocks = new();
-
-    public Item CreateItem(String name, String category)
-    {
-        var item = new Item
+    private static List<InventoryItem> _items = new();
+    public InventoryItem CreateItem(String name, String category)
+    { //InventoryItem objeto, retorna uma instancia de Inventory Item
+        var item = new InventoryItem
         {
             Id = Guid.NewGuid(),
             Name = name,
             Category = category,
-            CreatedAt = DateTime.Now,
-
-        };
-        var stock = new Stock
-        {
-            Id = Guid.NewGuid(),
-            ItemID = item.Id,
             Quantity = 0,
-            updateAt = DateTime.Now,
+            CreateAt = DateTime.Now,
 
         };
-        _stocks.Add(stock);
+
         _items.Add(item);
         Console.WriteLine("Item criado com sucesso!");
 
         return item;
     }
 
-    public void addStock(Guid itemId, int quantity)
+    public void addStock(Guid Id, int quantity)
     {
-        var stock = _stocks.FirstOrDefault(s => s.ItemID == itemId);
+        var stock = _items.FirstOrDefault(s => s.Id == Id);
         if (stock == null)
             throw new Exception("Estoque não encontrado para esse item!");
 
         stock.Quantity += quantity;
-        stock.updateAt = DateTime.Now;
+        stock.UpdateAt = DateTime.Now;
         Console.WriteLine("Item adicionado com sucesso!");
 
 
     }
-    public void removeStock(Guid itemId) {
-        var stock = _stocks.FirstOrDefault(s => s.ItemID == itemId);
+    public void removeStock(Guid Id, int quantity)
+    {
+        var stock = _items.FirstOrDefault(s => s.Id == Id);
         if (stock == null)
             throw new Exception("Item não existe");
         if (stock.Quantity <= 0)
             throw new Exception("item está zerado");
-        stock.Quantity -= 1;
-        stock.updateAt = DateTime.Now;
+        if (stock.Quantity < quantity)
+            throw new Exception("Quantidade insuficiente em estoque");
+        stock.Quantity -= quantity;
+        stock.UpdateAt = DateTime.Now;
         Console.WriteLine("Item removido com sucesso!");
 
     }
-    public String getStock()
+    public List<InventoryItem> GetAllItems()
     {
-        return _stocks.ToString();
+        return _items;
     }
 
+    public InventoryItem? GetById(Guid id)
+        // InventoryItem? pode retornar o InventoryItem ou null! 
+    {
+        return _items.FirstOrDefault(s => s.Id == id);
+    }
+    public void DeleteItem(Guid id)
+    {
+        var stock = _items.FirstOrDefault(s => s.Id == id);
+        if (stock == null) return;
+        _items.Remove(stock);
 
+    }
 
-
-} 
+}
