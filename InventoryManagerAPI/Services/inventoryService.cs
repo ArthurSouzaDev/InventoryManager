@@ -10,7 +10,7 @@ public class InventoryService
     private List<InventoryItem> _items = new();
 
     public InventoryItem CreateItem(String name, String category)
-    {
+    { //InventoryItem objeto, retorna uma instancia de Inventory Item
         var item = new InventoryItem
         {
             Id = Guid.NewGuid(),
@@ -56,6 +56,19 @@ public class InventoryService
     public List<InventoryItem> GetAllItems()
     {
         return _items;
+    }
+
+    public InventoryItem? GetById(Guid id)
+        // InventoryItem? pode retornar o InventoryItem ou null! 
+    {
+        return _items.FirstOrDefault(s => s.Id == id);
+    }
+    public void DeleteItem(Guid id)
+    {
+        var stock = _items.FirstOrDefault(s => s.Id == id);
+        if (stock == null) return;
+        _items.Remove(stock);
+
     }
 
 }

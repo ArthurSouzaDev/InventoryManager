@@ -1,4 +1,4 @@
-﻿namespace inventoryItem.Models
+﻿namespace InventoryManagerAPI.Models // Colocado minusculo para nao conflitar com a classe
 {
     public class InventoryItem
     {
@@ -15,5 +15,6 @@
             return $"Item: {Name} |Categoria: {Category}| Quantidade: {Quantity} | Criado em: {CreateAt}";
 
         }
+
     }
 }
