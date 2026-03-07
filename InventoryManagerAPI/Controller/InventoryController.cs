@@ -10,12 +10,12 @@ namespace InventoryManagerAPI.Controller
     [Route("inventory")] // Define todos os endpoints dessa classe comecam com /inventory
     public class InventoryController : ControllerBase
     {
-        private readonly InventoryService _service; //Injencao de dependencia
-        public InventoryController(InventoryService service)
-        {
-            _service = service;
+        private readonly InventoryService _service = new InventoryService(); //Injencao de dependencia
+        //public InventoryController(InventoryService service)
+        //{
+        //    _service = service;
 
-        }
+        //}
         [HttpGet]
         // Listar todos os itens
         public ActionResult<List<InventoryItem>> GetAllItems()

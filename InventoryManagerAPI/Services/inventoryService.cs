@@ -7,8 +7,7 @@ public class InventoryService
 {
     public InventoryService() { }
 
-    private List<InventoryItem> _items = new();
-
+    private static List<InventoryItem> _items = new();
     public InventoryItem CreateItem(String name, String category)
     { //InventoryItem objeto, retorna uma instancia de Inventory Item
         var item = new InventoryItem
