@@ -5,7 +5,6 @@ namespace InventoryManagerAPI.Services;
 
 public class InventoryService
 {
-    public InventoryService() { }
 
     private static List<InventoryItem> _items = new();
     public InventoryItem CreateItem(String name, String category)
