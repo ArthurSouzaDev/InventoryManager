@@ -8,12 +8,5 @@
         public int Quantity { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
-
-        public override string ToString()
-        {
-            return $"Item: {Name} |Categoria: {Category}| Quantidade: {Quantity} | Criado em: {CreateAt}";
-
-        }
-
     }
 }

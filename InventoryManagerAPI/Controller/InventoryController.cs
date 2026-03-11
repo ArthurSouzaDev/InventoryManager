@@ -1,9 +1,6 @@
 ﻿using InventoryManagerAPI.Models;
 using InventoryManagerAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-
-
-
 namespace InventoryManagerAPI.Controller
 {
     [ApiController] 
@@ -60,12 +57,6 @@ namespace InventoryManagerAPI.Controller
             if (item == null) return NotFound();
             _service.DeleteItem(id);
             return NoContent(); //NoContent, nada ha retornar, em caso de void!
-         
         }
-
-
     } 
 }
-
-
-
