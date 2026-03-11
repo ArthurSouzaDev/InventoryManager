@@ -6,18 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagerAPI.Controller
 {
-    [ApiController] //  diz pro .NET que essa classe é um controller de API.
-    [Route("inventory")] // Define todos os endpoints dessa classe comecam com /inventory
+    [ApiController] 
+    [Route("inventory")] 
     public class InventoryController : ControllerBase
     {
-        private readonly InventoryService _service = new InventoryService(); //Injencao de dependencia
-        //public InventoryController(InventoryService service)
-        //{
-        //    _service = service;
+        private readonly InventoryService _service = new InventoryService();
 
-        //}
         [HttpGet]
-        // Listar todos os itens
         public ActionResult<List<InventoryItem>> GetAllItems()
         {
             return Ok(_service.GetAllItems());
