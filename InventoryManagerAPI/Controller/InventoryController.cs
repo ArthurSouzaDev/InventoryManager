@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InventoryManagerAPI.Controller
 {
     [ApiController] 
-    [Route("inventory")] 
+    [Route("inventories")] 
     public class InventoryController : ControllerBase
     {
         private readonly InventoryService _service = new InventoryService();
@@ -19,7 +19,7 @@ namespace InventoryManagerAPI.Controller
         public ActionResult<InventoryItem> CreateItem([FromBody] CreateItemRequest request)
         {
             var item = _service.CreateItem(request.Name, request.Category);
-            return Created($"/inventory/{item.Id}", item); //Dar uma estudada sobre as tabelas Created etc
+            return Created($"/inventories/{item.Id}", item); //Dar uma estudada sobre as tabelas Created etc
 
         }
         // Adicionar item ao estoque
@@ -39,7 +39,7 @@ namespace InventoryManagerAPI.Controller
     {
         public int Quantity { get; set; }
     }
-
+            
     // Get Itens
     [HttpGet("{id}")]
         public ActionResult<InventoryItem> GetById([FromRoute] Guid id)
