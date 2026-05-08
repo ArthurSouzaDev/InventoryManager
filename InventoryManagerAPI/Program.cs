@@ -1,8 +1,19 @@
 
+using FluentValidation;
+using InventoryManagerAPI.Models;
 using InventoryManagerAPI.Services;
+using InventoryManagerAPI.Validator;
+using static InventoryManagerAPI.Controller.InventoryController;
+using static InventoryManagerAPI.Validator.InventoryItemValidator;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
+builder.Services.AddScoped<IValidator<InventoryItem>, InventoryItemValidator>();
+builder.Services.AddScoped<IValidator<AddItemRequest>, AddItemRequestValidator>();
+//Observações, esqueci de adicionar no Program, estava batendo erro 500
+builder.Services.AddScoped<InventoryService>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -12,6 +23,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
 
-
+    
 app.Run();
 
