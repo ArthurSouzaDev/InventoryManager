@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IValidator<InventoryItem>, InventoryItemValidator>();
 builder.Services.AddScoped<IValidator<ItemRequest>, AddItemRequestValidator>();
-//Observações, esqueci de adicionar no Program, estava batendo erro 500
 builder.Services.AddScoped<IValidator<RemoveStockRequest>, RemoveStockRequestValidator>();
 
 builder.Services.AddScoped<InventoryService>();
