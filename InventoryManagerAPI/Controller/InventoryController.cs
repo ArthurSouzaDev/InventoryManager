@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using InventoryManagerAPI.Models;
 using InventoryManagerAPI.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
-using static InventoryManagerAPI.Validator.InventoryItemValidator;
 
 namespace InventoryManagerAPI.Controller
 {
@@ -13,10 +11,9 @@ namespace InventoryManagerAPI.Controller
     public class InventoryController : ControllerBase
     {
         private readonly InventoryService _service;
-        private readonly IValidator<InventoryItem> _validator;
+        private readonly IValidator<InventoryItem> _validator;  
         private readonly IValidator<ItemRequest> _stockValidator;
         private readonly IValidator<RemoveStockRequest> _DeleteStockValidator;
-
         public InventoryController(InventoryService service, IValidator<InventoryItem> validator, IValidator<ItemRequest> stockValidator, IValidator<RemoveStockRequest> DeleteStockValidator)
         { 
             _service = service;
@@ -41,14 +38,19 @@ namespace InventoryManagerAPI.Controller
 
         public class CreateItemRequest
     {
-        public String Name { get; set; } = string.Empty;
-        public String Category { get; set; } = string.Empty;
-        public int Quantity { get; set; } = 0;
+
+        public string Name { get; set; } = string.Empty;
+
+        public string Category { get; set; } = string.Empty;
+
+        public int Quantity { get; set; }
     }
+
     public class ItemRequest
     {
         public int Quantity { get; set; }
     }
+
     public class RemoveStockRequest
         {
             public Guid ItemId { get; set; }
@@ -63,19 +65,11 @@ namespace InventoryManagerAPI.Controller
             var validation = await _stockValidator.ValidateAsync(request);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(e => e.ErrorMessage).ToArray());
-                return BadRequest(new { errors });
-            }
+                return ValidationErrorResponse(validation);
+
             _service.addStock(id, request.Quantity);
             return NoContent();
         } 
-
-
 
         [HttpDelete("{id}")]
         public ActionResult DeleteItem([FromRoute] Guid id)
@@ -92,18 +86,12 @@ namespace InventoryManagerAPI.Controller
             [FromBody] RemoveStockRequest request
         )
         {
+            request.ItemId = id;
             var validation = await _DeleteStockValidator.ValidateAsync(request);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(e => e.ErrorMessage).ToArray());
-                return BadRequest(new { errors });
+                return ValidationErrorResponse(validation);
 
-            }
             _service.DeleteStock(id, request.Quantity);
             return NoContent();
         }
@@ -114,16 +102,21 @@ namespace InventoryManagerAPI.Controller
             var validation = await _validator.ValidateAsync(item);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors
-                    .GroupBy(e => e.PropertyName)
-                    .ToDictionary(
-                    g => g.Key,
-                    g => g.Select(e => e.ErrorMessage).ToArray());
-                return BadRequest(new { errors });
-            }
+                return ValidationErrorResponse(validation);
+
             var createdItem = _service.CreateItem(item.Name, item.Category, item.Quantity);
             return Created($"/inventories/{createdItem.Id}", createdItem);
+        }
+
+        private IActionResult ValidationErrorResponse(ValidationResult validation)
+        {
+            var errors = validation.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                g => g.Key,
+                g => g.Select(e => e.ErrorMessage).ToArray());
+
+            return BadRequest(new { errors });
         }
 
     } 
